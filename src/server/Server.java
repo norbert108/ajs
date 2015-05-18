@@ -24,7 +24,7 @@ public class Server extends Thread {
             if(ic != null) {
                 ic.destroy();
             }
-        }
+        } //chuj
     }
 
     public Ice.Communicator getIc() {
