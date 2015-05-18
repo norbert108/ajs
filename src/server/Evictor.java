@@ -1,7 +1,10 @@
 package server;
 
 import Ice.Identity;
+import Ice.ObjectReader;
+import server.generated.Bank.Account;
 
+import java.io.*;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -82,10 +85,25 @@ public class Evictor implements Ice.ServantLocator
     }
 
     public Ice.Object add(Ice.Current curr, Ice.LocalObjectHolder cookie){
-        return new AccountImpl();
+        try {
+            File accountFile = new File("./" + curr.id.name);
+            ObjectInputStream ois = new ObjectInputStream(new FileInputStream(accountFile));
+
+            return (AccountImpl)ois.readObject();
+        } catch (IOException | ClassNotFoundException e){
+            System.out.println("Account with ID " + curr.id.name + " does not exist");
+            return null;
+        }
     }
 
     public void evict(Ice.Object servant, java.lang.Object cookie){
-        // nothin'
+        try {
+            File accountFile = new File("./" + ((Account) servant).getAccountNumber());
+
+            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(accountFile));
+            oos.writeObject(accountFile);
+        } catch (IOException e){
+            e.printStackTrace();
+        }
     }
 }
