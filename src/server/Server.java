@@ -16,7 +16,7 @@ public class Server extends Thread {
 
             Ice.ObjectAdapter adapter = ic.createObjectAdapterWithEndpoints("Bank", "default -p 10000");
             adapter.add(new BankManagerImpl(), ic.stringToIdentity("managment/BankManager"));
-            adapter.addServantLocator(new Evictor(2), "Accounts");
+            adapter.addServantLocator(new Evictor(2), "");
             adapter.activate();
 
             ic.waitForShutdown();

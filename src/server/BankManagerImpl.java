@@ -2,13 +2,16 @@ package server;
 
 import Ice.Current;
 import Ice.StringHolder;
-import server.generated.Bank.*;
+import server.generated.Bank.Account;
+import server.generated.Bank.IncorrectData;
+import server.generated.Bank.NoSuchAccount;
+import server.generated.Bank.PersonalData;
+import server.generated.Bank.RequestRejected;
+import server.generated.Bank._BankManagerDisp;
+import server.generated.Bank.accountType;
 
 import java.io.*;
 import java.util.*;
-
-import java.security.MessageDigest;
-import java.util.LinkedList;
 
 public class BankManagerImpl extends _BankManagerDisp {
     private Map<String, Account> registeredAccounts;
@@ -25,14 +28,18 @@ public class BankManagerImpl extends _BankManagerDisp {
             String generatedAccountID = generateAccountID(data);
             accountID.value = generatedAccountID;
 
-            Account account = new AccountImpl(data, type, generatedAccountID);
+            if (type == accountType.SILVER) {
+                Account account = new AccountImpl(data, type, generatedAccountID);
 
-            // create account file
-            File accountFile = new File("./" + generatedAccountID);
-            ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(accountFile));
-            oos.writeObject(account);
+                // create account file
+                File accountFile = new File("./" + generatedAccountID);
+                ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(accountFile));
+                oos.writeObject(account);
 
-            registeredAccounts.put(generatedAccountID, account);
+                registeredAccounts.put(generatedAccountID, account);
+            } else {
+                // xD
+            }
 
         } catch (Exception e){
             e.printStackTrace();
