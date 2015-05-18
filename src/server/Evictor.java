@@ -82,7 +82,7 @@ public class Evictor implements Ice.ServantLocator
     }
 
     public Ice.Object add(Ice.Current curr, Ice.LocalObjectHolder cookie){
-        return null;
+        return new AccountImpl();
     }
 
     public void evict(Ice.Object servant, java.lang.Object cookie){
